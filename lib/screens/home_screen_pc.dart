@@ -108,7 +108,7 @@ final Map<String, List<Lecture>> timeTable = {
   'Friday': [
     lecture1(subjects[2] ?? errorSubject, ''),
     lecture2(subjects[1] ?? errorSubject, ''),
-    lecture3(subjects[3] ?? errorSubject, ''),
+    lecture3(freeSubject, ''),
     lecture4(subjects[4] ?? errorSubject, ''),
   ],
 };
@@ -148,6 +148,11 @@ class _HomeScreenPCState extends State<HomeScreenPC> {
       _timer.tick;
     else
       print('You r free for the day');
+
+    // For Testing
+    // dayIndex = 4;
+    // day = 'Friday';
+    // lectures = timeTable[day];
     super.initState();
   }
 
@@ -209,9 +214,17 @@ class _HomeScreenPCState extends State<HomeScreenPC> {
                               color: Colors.red,
                             );
                           } else if (lectures![index].subject.name == 'free') {
-                            return Text(
-                              'Free Lecture',
-                              style: AppTextStyle.h4BoldBlackQuicksand,
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: Colors.blue.withOpacity(0.4),
+                                borderRadius: BorderRadius.circular(100.0),
+                              ),
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.all(20),
+                              child: Text(
+                                'Free Lecture',
+                                style: AppTextStyle.h4BoldBlackQuicksand,
+                              ),
                             );
                           } else {
                             return Container(
