@@ -101,7 +101,8 @@ final Map<String, List<Lecture>> timeTable = {
         'https://teams.microsoft.com/l/meetup-join/19%3ad61f66fb8cbd4ac9bd84c7c627d5f2cd%40thread.tacv2/1629092728646?context=%7b%22Tid%22%3a%22783ff96b-fe13-406b-b48d-45dc1853cbad%22%2c%22Oid%22%3a%225a5d1d21-8e1b-4c87-96e4-60dece011c7a%22%7d'),
     lecture2(subjects[5] ?? errorSubject,
         'https://teams.microsoft.com/l/meetup-join/19%3a1116e3a8f3244079be27874a97532531%40thread.tacv2/1629351256215?context=%7b%22Tid%22%3a%22783ff96b-fe13-406b-b48d-45dc1853cbad%22%2c%22Oid%22%3a%22e49e4ec0-c41f-4d4c-96df-aa4a6a5cf189%22%7d'),
-    lecture3(subjects[1] ?? errorSubject, ''),
+    lecture3(subjects[1] ?? errorSubject,
+        'https://teams.microsoft.com/l/meetup-join/19:37cbfc140f9b44f98d3f91c35f49f547@thread.tacv2/1628162346644?context=%7B%22Tid%22:%22783ff96b-fe13-406b-b48d-45dc1853cbad%22,%22Oid%22:%225f430052-b5da-4497-9b40-2b73bf8d6099%22%7D'),
     lecture4(subjects[1] ?? errorSubject, ''),
   ],
   'Friday': [
@@ -191,12 +192,6 @@ class _HomeScreenPCState extends State<HomeScreenPC> {
                         scrollDirection: Axis.horizontal,
                         itemCount: 4,
                         itemBuilder: (context, index) {
-                          if (lectures![index].subject.name == 'error') {
-                            return Icon(
-                              Icons.error,
-                              color: Colors.red,
-                            );
-                          }
                           int startMinutes =
                               (lectures![index].startTime.hour * 60) +
                                   lectures![index].startTime.minute;
@@ -205,60 +200,77 @@ class _HomeScreenPCState extends State<HomeScreenPC> {
                           int endMinutes =
                               (lectures![index].endTime.hour * 60) +
                                   lectures![index].endTime.minute;
-
-                          // print(
-                          //     '$index $startMinutes < $currentMinutes < $endMinutes');
-                          // print(lectures![index].lectureLink);
                           if (currentMinutes > 810) {
                             _timer.cancel();
                           }
-                          return Container(
-                            padding: EdgeInsets.all(20.0),
-                            margin: EdgeInsets.all(20.0),
-                            decoration: BoxDecoration(
-                              color: currentMinutes >= startMinutes &&
-                                      currentMinutes < endMinutes
-                                  ? Colors.green.withOpacity(0.4)
-                                  : Colors.white,
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  children: [
-                                    Text(
-                                      lectures![index].subject.name,
-                                      style: AppTextStyle.h5BoldBlackQuicksand,
-                                    ),
-                                    Text(
-                                      lectures![index].subject.code,
-                                      style: AppTextStyle.h5BoldBlackQuicksand,
-                                    ),
-                                    Text(
-                                      lectures![index].subject.teacher,
-                                      style: AppTextStyle.h5BoldBlackQuicksand,
-                                    ),
-                                  ],
-                                ),
-                                TextButton(
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: Colors.blueAccent,
+                          if (lectures![index].subject.name == 'error') {
+                            return Icon(
+                              Icons.error,
+                              color: Colors.red,
+                            );
+                          } else if (lectures![index].subject.name == 'free') {
+                            return Text(
+                              'Free Lecture',
+                              style: AppTextStyle.h4BoldBlackQuicksand,
+                            );
+                          } else {
+                            return Container(
+                              padding: EdgeInsets.all(20.0),
+                              margin: EdgeInsets.all(20.0),
+                              decoration: BoxDecoration(
+                                color: currentMinutes >= startMinutes &&
+                                        currentMinutes < endMinutes
+                                    ? Colors.green.withOpacity(0.4)
+                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Text(
+                                        lectures![index].subject.name,
+                                        style:
+                                            AppTextStyle.h5BoldBlackQuicksand,
+                                      ),
+                                      Text(
+                                        lectures![index].subject.code,
+                                        style:
+                                            AppTextStyle.h5BoldBlackQuicksand,
+                                      ),
+                                      Text(
+                                        lectures![index].subject.teacher,
+                                        style:
+                                            AppTextStyle.h5BoldBlackQuicksand,
+                                      ),
+                                    ],
                                   ),
-                                  onPressed: () {
-                                    print('join lec');
-                                    // _launchURL(lectures![index].lectureLink);
-                                    print(lectures![index].lectureLink);
-                                    _launchURL(lectures![index].lectureLink);
-                                  },
-                                  child: Text(
-                                    'Join',
-                                    style: AppTextStyle.h6BoldWhiteQuicksand,
-                                  ),
-                                )
-                              ],
-                            ),
-                          );
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor:
+                                          lectures![index].lectureLink != ''
+                                              ? Colors.blueAccent
+                                              : Colors.grey,
+                                    ),
+                                    onPressed: lectures![index].lectureLink !=
+                                            ''
+                                        ? () {
+                                            // print(lectures![index].lectureLink);
+                                            _launchURL(
+                                                lectures![index].lectureLink);
+                                          }
+                                        : null,
+                                    child: Text(
+                                      'Join',
+                                      style: AppTextStyle.h6BoldWhiteQuicksand,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            );
+                          }
                         }),
                   )
                 ],
